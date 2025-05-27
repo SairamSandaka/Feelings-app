@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Share Your Feelings</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header><h1>Share Your Thoughts & Feelings</h1></header>
+
+  <main>
+    <form id="thoughtForm">
+        <h2>Tell me How You Feel</h2>
+      <textarea id="message" placeholder="What's on your mind?" required></textarea>
+
+      <select id="mood">
+        <option value="">Select mood</option>
+        <option value="Happy">Happy</option>
+        <option value="Sad">Sad</option>
+        <option value="Excited">Excited</option>
+        <option value="Angry">Angry</option>
+        <option value="Anxious">Anxious</option>
+      </select>
+
+      <button type="submit">Send</button>
+    </form>
+  </main>
+
+  <script>
+  document.getElementById('thoughtForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const message = document.getElementById('message').value.trim();
+    const mood = document.getElementById('mood').value;
+
+    if (!message) {
+      alert('Message cannot be empty');
+      return;
+    }
+
+    try {
+      const res = await fetch('/thoughts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message, mood }),
+      });
+      if (res.ok) {
+        alert('Thought sent!');
+        document.getElementById('thoughtForm').reset();
+      } else {
+        alert('Error sending thought');
+      }
+    } catch (err) {
+      console.error('Error:', err);
+    }
+  });
+</script>
+
+</body>
+</html>
